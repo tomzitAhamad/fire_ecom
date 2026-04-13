@@ -1,6 +1,7 @@
 import 'package:fire_ecom/app/app_routes.dart';
 import 'package:fire_ecom/app/app_theme.dart';
 import 'package:fire_ecom/app/provider/language_provider.dart';
+import 'package:fire_ecom/app/provider/theme_provider.dart';
 import 'package:fire_ecom/features/auth/presentation/screens/splash_screen.dart';
 import 'package:fire_ecom/l10n/app_localizations.dart';
 
@@ -14,9 +15,12 @@ class EcomApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => LanguageProvider())],
-      child: Consumer<LanguageProvider>(
-        builder: (context, languageProvider, child) {
+      providers: [
+        ChangeNotifierProvider(create: (_) => LanguageProvider()),
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
+      ],
+      child: Consumer2<LanguageProvider, ThemeProvider>(
+        builder: (context, languageProvider, themeProvider, child) {
           return MaterialApp(
             localizationsDelegates: [
               AppLocalizations.delegate,
@@ -27,7 +31,7 @@ class EcomApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             theme: AppTheme.lightThemeData,
             darkTheme: AppTheme.darkThemeData,
-            themeMode: ThemeMode.system,
+            themeMode: themeProvider.themeMode,
             initialRoute: SplashScreen.routeName,
             onGenerateRoute: AppRoutes.onGenerateRoute,
             locale: languageProvider.currentLocale,
